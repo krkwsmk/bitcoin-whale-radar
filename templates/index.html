@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Whale Radar</title>
+    <link rel="icon" type="image/png" href="https://bitcoin.org/img/icons/opengraph.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --neon-blue: #00ff9d;
+            --neon-pink: #ff00ff;
+            --dark-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --gradient-start: #1a1a1a;
+            --gradient-end: #2a2a2a;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .dashboard {
+            display: grid;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        @media (min-width: 992px) {
+            .dashboard {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+        }
+
+        .chart-container {
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+            border: 1px solid var(--neon-blue);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(0, 255, 157, 0.1);
+        }
+
+        .price-ticker {
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+            border: 1px solid var(--neon-blue);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .price-value {
+            font-size: 2.5em;
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+        }
+
+        .list-container {
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+            border: 1px solid var(--neon-pink);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            height: calc(50vh - 100px);
+            overflow-y: auto;
+        }
+
+        .transaction-list, .wallet-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .list-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            transition: all 0.3s;
+        }
+
+        .list-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .amount {
+            color: var(--neon-blue);
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .status-badge {
+            float: right;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+        }
+
+        .status-confirmed {
+            background-color: var(--neon-blue);
+            color: var(--dark-bg);
+        }
+
+        .status-unconfirmed {
+            background-color: var(--neon-pink);
+            color: var(--dark-bg);
+        }
+
+        .section-title {
+            color: var(--neon-blue);
+            margin: 20px 0;
+            font-size: 1.5em;
+            text-shadow: 0 0 10px rgba(0, 255, 157, 0.3);
+        }
+
+        .wallet-address {
+            color: var(--neon-pink);
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .meta-info {
+            color: #888;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .btn-refresh {
+            background: transparent;
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 8px 20px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .btn-refresh:hover {
+            background: var(--neon-blue);
+            color: var(--dark-bg);
+            box-shadow: 0 0 15px rgba(0, 255, 157, 0.5);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--neon-blue);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-pink);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: var(--neon-blue);
+        }
+
+        .error-message {
+            color: var(--neon-pink);
+            text-align: center;
+            padding: 10px;
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(0, 255, 157, 0.1);
+            border-left: 4px solid var(--neon-blue);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mb-4" style="color: var(--neon-blue); text-shadow: 0 0 20px rgba(0, 255, 157, 0.5);">
+            Bitcoin Whale Radar
+            <div style="font-size: 0.5em; color: var(--neon-pink); margin-top: 5px;">
+                Tracking the Ocean's Largest Movements
+            </div>
+        </h1>
+
+        <!-- Price Ticker -->
+        <div class="price-ticker">
+            <h3>Current BTC Price</h3>
+            <div class="price-value" id="btc-price">Loading...</div>
+            <button class="btn-refresh mt-3" onclick="fetchData()">Refresh Data</button>
+        </div>
+
+        <!-- Historical Charts -->
+        <div class="chart-container">
+            <div id="chart-loading" class="loading">
+                <div class="loading-spinner"></div>
+                Loading chart data...
+            </div>
+            <canvas id="transactionChart" style="display: none;"></canvas>
+        </div>
+
+        <div class="dashboard">
+            <!-- Left Column -->
+            <div>
+                <h2 class="section-title">Largest Transactions (24h)</h2>
+                <div class="list-container">
+                    <ul class="transaction-list" id="transactions-container">
+                        <!-- Transactions will be loaded here -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div>
+                <h2 class="section-title">Top Bitcoin Wallets</h2>
+                <div class="list-container">
+                    <ul class="wallet-list" id="rich-list-container">
+                        <!-- Rich list will be loaded here -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Satoshi Addresses Column -->
+            <div>
+                <h2 class="section-title">Satoshi Era Addresses (2009)</h2>
+                <div class="list-container">
+                    <ul class="wallet-list" id="satoshi-addresses-container">
+                        <!-- Satoshi's addresses will be loaded here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let transactionChart;
+        let isLoading = false;
+
+        function showLoading(containerId) {
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.innerHTML = `
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        Loading data...
+                    </div>
+                `;
+            }
+        }
+
+        function showError(containerId, message) {
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.innerHTML = `
+                    <div class="error-message">
+                        ${message}
+                        <br>
+                        <button class="btn-refresh mt-2" onclick="fetchData()">Retry</button>
+                    </div>
+                `;
+            }
+        }
+
+        function initChart(data) {
+            const chartLoading = document.getElementById('chart-loading');
+            const chartCanvas = document.getElementById('transactionChart');
+            
+            if (!data.historical_transactions || data.historical_transactions.length === 0) {
+                chartLoading.innerHTML = `
+                    <div class="error-message">
+                        No historical transaction data available
+                        <br>
+                        <button class="btn-refresh mt-2" onclick="fetchData()">Retry</button>
+                    </div>
+                `;
+                chartCanvas.style.display = 'none';
+                return;
+            }
+
+            chartLoading.style.display = 'none';
+            chartCanvas.style.display = 'block';
+
+            if (transactionChart) {
+                transactionChart.destroy();
+            }
+
+            const chartData = data.historical_transactions.map(item => ({
+                x: new Date(item.x * 1000),
+                y: item.y
+            }));
+
+            const ctx = chartCanvas.getContext('2d');
+            transactionChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Transactions Per Day',
+                        data: chartData,
+                        borderColor: '#00ff9d',
+                        backgroundColor: 'rgba(0, 255, 157, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Bitcoin Network Activity (Last 30 Days)',
+                            color: '#fff'
+                        },
+                        legend: {
+                            labels: {
+                                color: '#fff'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'day',
+                                displayFormats: {
+                                    day: 'MMM D'
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#fff'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Number of Transactions',
+                                color: '#fff'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#fff'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        async function fetchData() {
+            if (isLoading) return;
+            isLoading = true;
+
+            // Show loading state for all containers
+            showLoading('transactions-container');
+            showLoading('rich-list-container');
+            showLoading('satoshi-addresses-container');
+            document.getElementById('btc-price').textContent = 'Loading...';
+
+            try {
+                const response = await fetch('/api/data');
+                if (!response.ok) throw new Error('Failed to fetch data');
+                
+                const data = await response.json();
+                
+                // Update BTC price
+                document.getElementById('btc-price').textContent = `$${data.current_btc_price}`;
+                
+                // Update chart
+                initChart(data);
+                
+                // Update transactions
+                const container = document.getElementById('transactions-container');
+                if (data.transactions && data.transactions.length > 0) {
+                    container.innerHTML = data.transactions.map(tx => `
+                        <li class="list-item">
+                            <span class="status-badge ${tx.status === 'Confirmed' ? 'status-confirmed' : 'status-unconfirmed'}">
+                                ${tx.status}
+                            </span>
+                            <div class="amount">${tx.amount} BTC</div>
+                            <div class="meta-info">
+                                Value: ${tx.total_value_usd}
+                                <br>
+                                BTC Price: $${tx.btc_price_usd}
+                                <br>
+                                Time: ${formatTimestamp(tx.timestamp)}
+                                <br>
+                                <a href="https://blockchain.info/tx/${tx.hash}" 
+                                   class="btn-refresh btn-sm mt-2" 
+                                   target="_blank">View Transaction</a>
+                            </div>
+                        </li>
+                    `).join('');
+                } else {
+                    showError('transactions-container', 'No recent large transactions found');
+                }
+
+                // Update rich list
+                const richListContainer = document.getElementById('rich-list-container');
+                if (data.rich_list && data.rich_list.length > 0) {
+                    richListContainer.innerHTML = data.rich_list.map((wallet, index) => `
+                        <li class="list-item">
+                            <div class="amount">#${index + 1} ${getWalletLabel(wallet.address)}</div>
+                            <div class="wallet-address">${wallet.address.substring(0, 20)}...</div>
+                            <div class="meta-info">
+                                Balance: ${wallet.balance_btc} BTC
+                                <br>
+                                Value: ${wallet.balance_usd}
+                            </div>
+                        </li>
+                    `).join('');
+                } else {
+                    showError('rich-list-container', 'Failed to load rich list data');
+                }
+
+                // Update Satoshi addresses
+                const satoshiContainer = document.getElementById('satoshi-addresses-container');
+                if (data.satoshi_addresses && data.satoshi_addresses.length > 0) {
+                    satoshiContainer.innerHTML = data.satoshi_addresses.map(wallet => `
+                        <li class="list-item">
+                            <div class="amount">${wallet.description}</div>
+                            <div class="wallet-address">${wallet.address}</div>
+                            <div class="meta-info">
+                                Block: ${wallet.block_height}
+                                <br>
+                                Mined: ${wallet.date_mined}
+                                <br>
+                                Balance: ${wallet.balance_btc} BTC
+                                <br>
+                                Value: ${wallet.balance_usd}
+                            </div>
+                        </li>
+                    `).join('');
+                } else {
+                    showError('satoshi-addresses-container', 'Failed to load Satoshi address data');
+                }
+            } catch (error) {
+                console.error('Failed to fetch data:', error);
+                showError('transactions-container', 'Failed to load transaction data');
+                showError('rich-list-container', 'Failed to load rich list data');
+                showError('satoshi-addresses-container', 'Failed to load Satoshi address data');
+                document.getElementById('btc-price').textContent = 'Error loading price';
+            } finally {
+                isLoading = false;
+            }
+        }
+
+        function getWalletLabel(address) {
+            const labels = {
+                'bc1qd4ysezhmypwty5dnw7c8nqy5h5nxg0xqsvaefd0qn5kq32vwnwqqgv4rzr': 'Binance Cold Wallet',
+                'bc1qm34lsc65zpw79lxes69zkqmk6ee3ewf0j77s3h': 'Bitfinex Cold Wallet',
+                '34xp4vRoCGJym3xR7yCVPFHoCNxv4Twseo': 'Binance-coldwallet',
+                'bc1qx9t2l3pyny2spqpqlye8svce70nppwtaxwdrp4': 'Bitfinex Cold Wallet 2',
+                '3LYJfcfHPXYJreMsASk2jkn69LWEYKzexb': 'Binance Hot Wallet',
+                '1LQoWist8KkaUXSPKZHNvEyfrEkPHzSsCd': 'Huobi Cold Wallet',
+                '3M219KR5vEneNb47ewrPfWyb5jQ2DjxRP6': 'Binance Cold Wallet 2',
+                'bc1qazcm763858nkj2dj986etajv6wquslv8uxwczt': 'Bitfinex Cold Wallet 3'
+            };
+            return labels[address] || 'Unknown Wallet';
+        }
+
+        function formatTimestamp(timestamp) {
+            return new Date(timestamp * 1000).toLocaleString();
+        }
+
+        // Initial load
+        fetchData();
+        // Refresh every 2 minutes instead of 1 minute to avoid rate limits
+        setInterval(fetchData, 120000);
+    </script>
+</body>
+</html>
