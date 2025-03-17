@@ -1,43 +1,68 @@
-# bitcoin-whale-radar
-Tracking the Ocean's Largest Movements
-=======
-# Large Bitcoin Transactions Tracker
+# Bitcoin Whale Radar 🐋
 
-This web application displays the largest Bitcoin transactions from recent blocks.
+A real-time dashboard for tracking Bitcoin whale activities, large transactions, and monitoring Satoshi's original wallet addresses. Built with Python Flask and modern web technologies.
 
-## Setup
-
-1. Install the required dependencies:
-```
-pip install -r requirements.txt
-```
-
-2. Run the application:
-```
-python app.py
-```
-
-3. Open your web browser and navigate to `http://localhost:5000`
+![Bitcoin Whale Radar](https://bitcoin.org/img/icons/opengraph.png)
 
 ## Features
 
-- Displays the top 10 largest Bitcoin transactions from recent blocks
-- Shows transactions larger than 10 BTC
-- Auto-refreshes every 2 minutes
-- Shows transaction details including:
-  - Amount in BTC
-  - Number of inputs and outputs
-  - Transaction timestamp
-  - Transaction fee
-  - Link to view the transaction on blockchain.info
-- Manual refresh button
-- Responsive design that works on both desktop and mobile devices
+- 📊 Real-time Bitcoin price tracking
+- 🔍 Monitor top Bitcoin whale wallets and their balances
+- 💰 Track large Bitcoin transactions
+- 🏛️ Historical transaction data visualization
+- 🔗 Original Satoshi wallet monitoring
+- ⚡ Auto-refreshing data every 2 minutes
+- 🎨 Modern, responsive UI with neon cyberpunk theme
 
-## Technical Details
+## Tech Stack
 
-The application uses the free Blockchain.com API to:
-1. Fetch recent blocks
-2. Get detailed transaction data from each block
-3. Filter and sort transactions by amount
-4. Display the largest transactions in a user-friendly interface
->>>>>>> 599a3c0 (first commit)
+- Backend: Python Flask
+- Frontend: HTML5, CSS3, JavaScript
+- Charts: Chart.js
+- Styling: Bootstrap 5
+- APIs: 
+  - Binance (Price data)
+  - Blockchain.info
+  - Blockchair.com
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/jaibhasin/bitcoin-whale-radar.git
+cd bitcoin-whale-radar
+```
+
+2. Install required Python packages:
+```bash
+pip install flask requests python-dateutil
+```
+
+3. Run the application:
+```bash
+python app.py
+```
+
+4. Open your browser and navigate to:
+```
+http://localhost:5000
+```
+
+## API Rate Limits
+
+The application respects API rate limits by:
+- Implementing 0.5s delay between wallet balance requests
+- Refreshing data every 2 minutes instead of every minute
+- Using fallback APIs when primary APIs are unavailable
+
+## Contributing
+
+Feel free to fork the project and submit pull requests. You can also open issues for bugs or feature requests.
+
+## License
+
+This project is open source and available under the MIT License.
+
+## Disclaimer
+
+This application is for educational purposes only. Always do your own research before making any investment decisions. Cryptocurrency trading carries significant risks.
