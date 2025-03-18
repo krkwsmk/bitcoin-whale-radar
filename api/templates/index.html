@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoWhale Radar | Bitcoin Tracking</title>
+    <link rel="icon" type="image/png" href="https://bitcoin.org/img/icons/opengraph.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <i class="fab fa-bitcoin me-2 bitcoin-icon"></i>CryptoWhale Radar
+                </a>
+                <button class="btn-refresh ms-auto" onclick="fetchData()">
+                    <i class="fas fa-sync-alt me-2"></i>Refresh Data
+                </button>
+            </div>
+        </nav>
+
+        <div class="container main-content">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="price-card">
+                        <div class="price-header">Current Bitcoin Price</div>
+                        <div class="price-value" id="btc-price">Loading...</div>
+                        <div class="price-updated" id="price-updated">Last updated: --</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="stats-card">
+                        <div class="stats-header">Bitcoin Network Stats</div>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-label">Market Cap</div>
+                                <div class="stat-value" id="market-cap">--</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">24h Volume</div>
+                                <div class="stat-value" id="volume">--</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Dominance</div>
+                                <div class="stat-value" id="dominance">--</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Circulating Supply</div>
+                                <div class="stat-value" id="supply">--</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <span>Bitcoin Transaction Volume (USD) - Last 2 Years</span>
+                            <div class="chart-controls">
+                                <button class="btn-chart active" data-period="1m">1M</button>
+                                <button class="btn-chart" data-period="3m">3M</button>
+                                <button class="btn-chart" data-period="6m">6M</button>
+                                <button class="btn-chart" data-period="1y">1Y</button>
+                                <button class="btn-chart" data-period="2y">2Y</button>
+                            </div>
+                        </div>
+                        <div id="chart-loading" class="loading">
+                            <div class="spinner"></div>
+                            <div>Loading chart data...</div>
+                        </div>
+                        <canvas id="volumeChart" height="300" style="display: none;"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="list-card">
+                        <div class="list-header">
+                            <i class="fas fa-exchange-alt me-2"></i>Largest Transactions (24h)
+                        </div>
+                        <div id="transactions-loading" class="loading">
+                            <div class="spinner"></div>
+                            <div>Loading transactions...</div>
+                        </div>
+                        <ul id="transactions-container" class="transaction-list" style="display: none;">
+                            <!-- Transactions will be loaded here -->
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="list-card">
+                        <div class="list-header">
+                            <i class="fas fa-wallet me-2"></i>Top Bitcoin Wallets
+                        </div>
+                        <div id="wallets-loading" class="loading">
+                            <div class="spinner"></div>
+                            <div>Loading wallet data...</div>
+                        </div>
+                        <ul id="rich-list-container" class="wallet-list" style="display: none;">
+                            <!-- Rich list will be loaded here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>© 2025 CryptoWhale Radar | Bitcoin Tracking</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <p>Data provided by blockchain.info and other public APIs</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
