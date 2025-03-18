@@ -297,7 +297,7 @@ def get_large_transactions():
 @app.route('/')
 def index():
     """Render the main page"""
-    return render_template('/templates/index')
+    return render_template('/templates/index/123')
 
 @app.route('/api/data')
 def get_data():
