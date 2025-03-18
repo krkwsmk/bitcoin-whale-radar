@@ -1,0 +1,344 @@
+:root {
+    --primary-color: #f7931a;
+    --secondary-color: #00c3ff;
+    --accent-color: #ff00ff;
+    --dark-bg: #0a0e17;
+    --card-bg: #121722;
+    --card-border: #1e2130;
+    --text-primary: #ffffff;
+    --text-secondary: #8b9ab4;
+    --success-color: #00c853;
+    --danger-color: #ff3d71;
+    --gradient-start: #121722;
+    --gradient-end: #1a1f2c;
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: var(--text-primary);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    background-color: var(--card-bg);
+    border-bottom: 1px solid var(--card-border);
+    padding: 15px 0;
+    margin-bottom: 30px;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.bitcoin-icon {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+}
+
+.main-content {
+    flex: 1;
+    padding-bottom: 30px;
+}
+
+/* Cards */
+.price-card, .stats-card, .chart-card, .list-card {
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 20px;
+    height: 100%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.price-card:hover, .stats-card:hover, .chart-card:hover, .list-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Price Card */
+.price-header {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.price-value {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-shadow: 0 0 10px rgba(247, 147, 26, 0.3);
+    margin-bottom: 10px;
+}
+
+.price-updated {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Stats Card */
+.stats-header {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.stat-item {
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+/* Chart Card */
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.chart-card {
+    position: relative;
+    min-height: 400px;
+}
+
+.chart-controls {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-chart {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: none;
+    color: var(--text-secondary);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-chart:hover, .btn-chart.active {
+    background-color: var(--primary-color);
+    color: var(--dark-bg);
+}
+
+/* List Cards */
+.list-header {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 10px;
+}
+
+.transaction-list, .wallet-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.list-item {
+    padding: 15px;
+    border-bottom: 1px solid var(--card-border);
+    transition: background-color 0.2s ease;
+}
+
+.list-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.list-item:last-child {
+    border-bottom: none;
+}
+
+.tx-amount, .wallet-balance {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.tx-value, .wallet-value {
+    color: var(--success-color);
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.tx-hash, .wallet-address {
+    color: var(--secondary-color);
+    font-size: 0.85rem;
+    word-break: break-all;
+    margin-bottom: 5px;
+}
+
+.tx-time, .wallet-type {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.tx-details, .wallet-details {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.tx-detail-item, .wallet-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.tx-link {
+    display: inline-block;
+    margin-top: 10px;
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s ease;
+}
+
+.tx-link:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+/* Loading */
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    color: var(--text-secondary);
+}
+
+.spinner {
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top: 3px solid var(--primary-color);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Error */
+.error-message {
+    color: var(--danger-color);
+    text-align: center;
+    padding: 20px;
+}
+
+/* Button */
+.btn-refresh {
+    background-color: var(--primary-color);
+    color: var(--dark-bg);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-refresh:hover {
+    background-color: #e68a18;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(247, 147, 26, 0.3);
+}
+
+/* Footer */
+.footer {
+    background-color: var(--card-bg);
+    border-top: 1px solid var(--card-border);
+    padding: 20px 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--card-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--card-border);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .price-value {
+        font-size: 2.5rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .chart-controls {
+        margin-top: 10px;
+    }
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}

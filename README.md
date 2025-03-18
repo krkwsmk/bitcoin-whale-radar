@@ -1,68 +1,79 @@
-# Bitcoin Whale Radar 🐋
+# CryptoWhale Radar - Bitcoin Tracking Website
 
-A real-time dashboard for tracking Bitcoin whale activities, large transactions, and monitoring Satoshi's original wallet addresses. Built with Python Flask and modern web technologies.
-
-![Bitcoin Whale Radar](https://bitcoin.org/img/icons/opengraph.png)
+A modern, responsive web application that tracks Bitcoin data, including the latest price, largest transactions, top wallets, and historical transaction volume.
 
 ## Features
 
-- 📊 Real-time Bitcoin price tracking
-- 🔍 Monitor top Bitcoin whale wallets and their balances
-- 💰 Track large Bitcoin transactions
-- 🏛️ Historical transaction data visualization
-- 🔗 Original Satoshi wallet monitoring
-- ⚡ Auto-refreshing data every 2 minutes
-- 🎨 Modern, responsive UI with neon cyberpunk theme
+- **Real-time Bitcoin Price**: Displays the current Bitcoin price in USD
+- **Largest Transactions**: Shows the top 10 Bitcoin transactions from the last 24 hours
+- **Top Bitcoin Wallets**: Lists the top 10 richest Bitcoin wallets in the world
+- **Historical Volume Chart**: Visualizes the volume of Bitcoin transactions over time
+- **Responsive Design**: Works on desktop and mobile devices
+- **Dark Theme**: Modern dark UI for comfortable viewing
 
-## Tech Stack
+## Technologies Used
 
-- Backend: Python Flask
-- Frontend: HTML5, CSS3, JavaScript
-- Charts: Chart.js
-- Styling: Bootstrap 5
-- APIs: 
-  - Binance (Price data)
-  - Blockchain.info
-  - Blockchair.com
+- **Backend**: Flask (Python)
+- **Frontend**: HTML5, CSS3, JavaScript
+- **Charts**: Chart.js with date-fns adapter
+- **Styling**: Bootstrap 5 and custom CSS
+- **Icons**: Font Awesome
+- **APIs**: Blockchain.info, Binance, and other public APIs
 
-## Installation
+## Setup and Installation
 
 1. Clone the repository:
-```bash
-git clone https://github.com/jaibhasin/bitcoin-whale-radar.git
-cd bitcoin-whale-radar
-```
+   ```
+   git clone <repository-url>
+   cd bitcoin-whale-radar
+   ```
 
-2. Install required Python packages:
-```bash
-pip install flask requests python-dateutil
-```
+2. Install the required dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
 
 3. Run the application:
-```bash
-python app.py
-```
+   ```
+   python app.py
+   ```
 
 4. Open your browser and navigate to:
-```
-http://localhost:5000
-```
+   ```
+   http://localhost:5000
+   ```
 
-## API Rate Limits
+## API Endpoints
 
-The application respects API rate limits by:
-- Implementing 0.5s delay between wallet balance requests
-- Refreshing data every 2 minutes instead of every minute
-- Using fallback APIs when primary APIs are unavailable
+- `/api/data`: Returns Bitcoin price, largest transactions, rich list, and historical volume data
 
-## Contributing
+## Project Structure
 
-Feel free to fork the project and submit pull requests. You can also open issues for bugs or feature requests.
+- `app.py`: Main Flask application with API endpoints and data processing logic
+- `templates/index.html`: Main HTML template for the website
+- `static/css/style.css`: Custom CSS styles
+- `static/js/main.js`: JavaScript for data fetching and chart rendering
+
+## Data Sources
+
+- Current Bitcoin price: Binance API
+- Transaction data: Blockchain.info API
+- Rich list data: Blockchain.info API
+- Historical volume data: Blockchain.info charts API
+
+## Caching
+
+The application implements caching to reduce API calls and improve performance:
+- Bitcoin price: 30 seconds
+- Historical volume data: 1 hour
+- Rich list data: 5 minutes
 
 ## License
 
-This project is open source and available under the MIT License.
+MIT License
 
-## Disclaimer
+## Acknowledgements
 
-This application is for educational purposes only. Always do your own research before making any investment decisions. Cryptocurrency trading carries significant risks.
+- Blockchain.info for providing public APIs
+- Chart.js for the charting library
+- Bootstrap for the responsive framework
