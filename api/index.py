@@ -6,7 +6,7 @@ import cachetools.func
 import logging
 import random
 
-# Configure logging 12
+# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
