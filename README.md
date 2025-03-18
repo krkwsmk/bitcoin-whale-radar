@@ -24,7 +24,7 @@ A modern, responsive web application that tracks Bitcoin data, including the lat
 
 1. Clone the repository:
    ```
-   git clone <repository-url>
+   git clone <https://github.com/jaibhasin/bitcoin-whale-radar>
    cd bitcoin-whale-radar
    ```
 
