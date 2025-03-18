@@ -2,6 +2,8 @@
 
 A modern, responsive web application that tracks Bitcoin data, including the latest price, largest transactions, top wallets, and historical transaction volume.
 
+![CryptoWhale Radar Screenshot](assets/screenshot.png)  
+
 ## Features
 
 - **Real-time Bitcoin Price**: Displays the current Bitcoin price in USD
@@ -67,6 +69,11 @@ The application implements caching to reduce API calls and improve performance:
 - Bitcoin price: 30 seconds
 - Historical volume data: 1 hour
 - Rich list data: 5 minutes
+
+## 🚀 Contributing  
+Contributions are welcome! Feel free to fork this repository and submit a pull request.  
+
+If you have any suggestions or improvements, open an issue or create a pull request.  
 
 ## License
 
