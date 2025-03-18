@@ -13,7 +13,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-app = Flask(__name__, template_folder='/api/templates'))
+app = Flask(__name__, template_folder='/api/templates')
 
 def format_number(number, format_type='regular'):
     """Format numbers for display"""
