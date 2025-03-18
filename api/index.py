@@ -40,7 +40,7 @@ def format_number(number, format_type='regular'):
 def get_btc_price():
     """Get current Bitcoin price in USD"""
     try:
-        response = requests.get('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT', timeout=5)
+        response = requests.get('#', timeout=5)
         if response.status_code == 200:
             data = response.json()
             logger.info(f"BTC Price fetched successfully")
