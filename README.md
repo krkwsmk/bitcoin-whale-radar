@@ -2,7 +2,8 @@
 
 A modern, responsive web application that tracks Bitcoin data, including the latest price, largest transactions, top wallets, and historical transaction volume.
 
-![CryptoWhale Radar Screenshot](assets/screenshot.png)  
+![CryptoWhale Radar Screenshot1](assets/ss1.png)  
+![CryptoWhale Radar Screenshot2](assets/ss2.png)  
 
 ## Features
 
