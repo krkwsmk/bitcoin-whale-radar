@@ -13,7 +13,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='api/templates'))
 
 def format_number(number, format_type='regular'):
     """Format numbers for display"""
@@ -297,7 +297,7 @@ def get_large_transactions():
 @app.route('/')
 def index():
     """Render the main page"""
-    return render_template('/api/templates/index.html')
+    return render_template('index.html')
 
 @app.route('/api/data')
 def get_data():
